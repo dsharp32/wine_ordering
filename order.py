@@ -16,6 +16,7 @@ import is_empty as ie
 import send_drafts as sd
 import pandas as pd
 import time
+import shutil
 
 INCREMENT = 20 # Define order block length. Change to worksheet specifications. 
 
@@ -27,6 +28,7 @@ row_count = sheet.max_row # Get length of sheet
 
 start = 3 # Start value of first order block.
 end = 21 # End value of first order block.
+
 cost_list = [] # Create empty cost list.
 email_list = []
 company_list = []
@@ -34,6 +36,7 @@ body_list = []
 po_list = []
 cc_list = []
 bcc_list = []
+
 drafts = {}
 
 for order_blocks in range(0,row_count): # Select worksheet rows to iterate over.
@@ -114,21 +117,29 @@ for order_blocks in range(0,row_count): # Select worksheet rows to iterate over.
     
 wb.save('Order Sheet/order_sheet_2020.xlsx') # Save workbook
 
-df = pd.DataFrame(drafts)
-df['cost'] = df['cost'].astype(float)
+if ie.is_empty(cost_list) == False:
+    df = pd.DataFrame(drafts)
+    df['cost'] = df['cost'].astype(float)
+    num_orders = len(df.index)
+    total_cost = round(df['cost'].sum(),2)
 
-num_orders = len(df.index)
-total_cost = round(df['cost'].sum(),2)
-
-if num_orders == 1:
-    print(f'You have {num_orders} draft order with a total cost inc GST of: ${total_cost}.\n')
-else:
-    print(f'You have {num_orders} draft orders with a total cost inc GST of: ${total_cost}.\n')
+    for i,j in df.iterrows(): 
+        print(i,j)
+        print()
     
-for i,j in df.iterrows(): 
-    print(i,j)
-    print()
+    if num_orders == 1:
+        print(f'You have {num_orders} draft order with a total cost inc GST of: ${total_cost}.\n')
+    else:
+        print(f'You have {num_orders} draft orders with a total cost inc GST of: ${total_cost}.\n')
 
-sd.send_drafts(df)
+    sd.send_drafts(df)
+    
+    shutil.rmtree('Draft Orders/') # Delete drafts.
+    
+else:
+    print("You haven't placed any orders dumb dumb! Ask your Mum if you can have another go.")
+
+
+
 
 

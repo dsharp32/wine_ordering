@@ -7,10 +7,8 @@ Created on Sun May 24 22:27:50 2020
 """
 
 import generate_date as gd
-import send_message_gmail as sm
-import shutil
-import os
-import time
+import send_loop as sl
+import move_files as ml
 
 date = gd.generate_date()
 
@@ -31,22 +29,17 @@ def send_drafts(df):
             bcc_email = df.iloc[i, 5]
             
             print(f'Sending order to {company}')
-            sm.send_message(email, company, body,po,cc_email,bcc_email)
+            sl.send_loop(email, company, body,po,cc_email,bcc_email)
             
-        source = 'Draft Orders/'
-        dest1 = 'Sent Orders/' + date + '/'
-
-        files = os.listdir(source)
-
-        for f in files:
-            shutil.move(source+f, dest1)
-        time.sleep(1)
-        print('Ordering completed.\nHave a nice day!')  
+            ml.move_files(company, po)
     
     elif value == 'N':
         print('Orders not sent.')
-        shutil.rmtree('Draft Orders/')
         
     else:
         print('Invalid input. Please try again.')
         send_drafts(df)
+    
+    print('Ordering completed.\nHave a nice day!')
+    
+        
