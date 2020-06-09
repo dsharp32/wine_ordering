@@ -14,6 +14,7 @@ You will also need to write a python module called send_message.py with argument
 
 The easiest option is to use the the ezgmail module by Al Sweigart. Instructions for utilizing it can be found here: 
 
+
 https://automatetheboringstuff.com/2e/chapter18/
 
 ### Installing
@@ -24,7 +25,7 @@ Use order_sheet_2020.xlsx as an order template. As many blocks as needed can be 
 
 You need to close the excel file before running the program. This is very easy to forget to do!
 
-run wine_ordering_2.0.py.
+run order.py in the command line.
 
 ## Testing
 
